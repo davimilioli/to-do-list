@@ -1,0 +1,56 @@
+<main class="app">
+  <section class="app-content">
+    <div class="container">
+      <div class="todo-header">
+        <h2 class="todo-title">Lista de Tarefas</h2>
+        <p class="todo-subtitle">Organize suas tarefas de forma simples</p>
+      </div>
+
+      <form class="todo-new">
+        <input type="text" placeholder="O que você precisa fazer?" />
+        <button type="submit">Adicionar</button>
+      </form>
+
+      <div class="todo-filters">
+        <button class="active">Todas</button>
+        <button>Ativas</button>
+        <button>Concluídas</button>
+        <button class="clear">Limpar concluídas</button>
+      </div>
+
+      <ul class="todo-list">
+        <li class="todo-item">
+          <button class="checkbox">
+            <img src="icons/check.svg" alt="">
+          </button>
+          <span class="text completed">Estudar Angular</span>
+          <div class="actions">
+            <button>
+                <img src="icons/edit.svg" alt="">
+            </button>
+            <button>
+                <img src="icons/delete.svg" alt="">
+            </button>
+          </div>
+        </li>
+
+        <li class="todo-item">
+          <button class="checkbox"></button>
+          <span class="text">Criar Receita</span>
+          <div class="actions">
+            <button>
+                <img src="icons/edit.svg" alt="">
+            </button>
+            <button>
+                <img src="icons/delete.svg" alt="">
+            </button>
+          </div>
+        </li>
+      </ul>
+
+      <div class="todo-meta">
+        <span>2 tarefas restantes</span>
+      </div>
+    </div>
+  </section>
+</main>
