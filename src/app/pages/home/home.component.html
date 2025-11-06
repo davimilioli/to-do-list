@@ -8,7 +8,7 @@
 
       <form class="todo-new">
         <input type="text" placeholder="O que você precisa fazer?" />
-        <button type="submit">Adicionar</button>
+        <button type="submit" class="btn primary">Adicionar</button>
       </form>
 
       <div class="todo-filters">
@@ -19,38 +19,59 @@
       </div>
 
       <ul class="todo-list">
-        <li class="todo-item">
-          <button class="checkbox">
-            <img src="icons/check.svg" alt="">
-          </button>
-          <span class="text completed">Estudar Angular</span>
-          <div class="actions">
-            <button>
-                <img src="icons/edit.svg" alt="">
-            </button>
-            <button>
-                <img src="icons/delete.svg" alt="">
-            </button>
-          </div>
-        </li>
-
-        <li class="todo-item">
-          <button class="checkbox"></button>
-          <span class="text">Criar Receita</span>
-          <div class="actions">
-            <button>
-                <img src="icons/edit.svg" alt="">
-            </button>
-            <button>
-                <img src="icons/delete.svg" alt="">
-            </button>
-          </div>
-        </li>
+        @if(todoList){
+          @for(todo of todoList.todos; track todo){
+            <li class="todo-item">
+              <button class="checkbox" (click)="toggleCompleted(todo)">
+                <img src="icons/check.svg" [class.completed]="todo.completed">
+              </button>
+              @if(editTodoId !== todo.id){
+              <span class="text" [class.completed]="todo.completed">
+                {{ todo.title }}
+              </span>
+            } @else {
+                <input
+                type="text"
+                class="input-edit"
+                [value]="todo.title"
+                [(ngModel)]="todo.title"
+                (keyup.enter)="editTitle(todo)"
+                (blur)="editTitle(todo)"
+                autofocus
+                >
+              }
+              <div class="actions">
+              @if(editTodoId !== todo.id){
+                <button (click)="enableEdit(todo.id)" class="btn edit">
+                    <img src="icons/edit.svg">
+                </button>
+              }@else {
+                <button (click)="cancelEdit()" class="btn save">
+                    <img src="icons/save.svg">
+                </button>
+              }
+                <button class="btn delete" (click)="deleteTodo(todo)">
+                    <img src="icons/delete.svg">
+                </button>
+              </div>
+            </li>
+          }
+        } @else {
+          <p>Carregando..</p>
+        }
       </ul>
 
       <div class="todo-meta">
-        <span>2 tarefas restantes</span>
+        <span>
+          @if(todoList) {
+            {{ todoList.total }}
+          }@else {
+            0
+          }
+          tarefas restantes
+        </span>
       </div>
     </div>
   </section>
+  <app-modal-delete [showModal]="showModal" (close)="onCloseModal()"></app-modal-delete>
 </main>

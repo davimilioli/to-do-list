@@ -35,3 +35,43 @@ body {
     background: var(--bg-color);
     color: var(--text-color);
 }
+
+.btn {
+  background: var(--primary-color);
+  border: none;
+  color: #FFF;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: var(--secondary-color);
+  }
+
+  &.primary {
+    background: var(--primary-color);
+
+    &:hover {
+      background: var(--secondary-color);
+    }
+  }
+
+  &.edit {
+    background: var(--primary-color);
+  }
+
+  &.save {
+    background: #06d463;
+  }
+  
+  &.delete {
+    background: #d4064b;
+  }
+     
+}
