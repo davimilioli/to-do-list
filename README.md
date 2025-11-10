@@ -9,7 +9,7 @@ Este é um To-do List desenvolvido com Angular, permitindo gerenciar tarefas com
 - Exclusão de tarefas
 - Marcação de tarefas como concluídas
 - Filtros: Todos, Ativos e Concluídos
-- Feedblack via notificações
+- Feedback via notificações
 
 O projeto foi criado para demonstrar o bom uso de componentes, eventos e templates reativos no Angular.
 
