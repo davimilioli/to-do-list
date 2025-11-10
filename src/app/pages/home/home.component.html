@@ -7,11 +7,12 @@
       </div>
 
       <app-todo-form (newTodo)="insertTodo($event)"></app-todo-form>
-
-      <app-filter
-      (filter)="filterList($event)"
-      [currentFilter]="currentFilter"
-      ></app-filter>
+      @if(todoList){
+        <app-filter
+        (filter)="filterList($event)"
+        [currentFilter]="currentFilter"
+        ></app-filter>
+      }
 
       <ul class="todo-list">
         @if(todoList){
@@ -52,20 +53,21 @@
             </li>
           }
         } @else {
-          <p>Carregando..</p>
+          <app-loading></app-loading>
         }
       </ul>
-
-      <div class="todo-meta">
-        <span>
-          @if(todoList) {
-            {{ todoList.total }}
-          }@else {
-            0
-          }
-          tarefas restantes
-        </span>
-      </div>
+      @if(todoList){
+        <div class="todo-meta">
+          <span>
+            @if(todoList) {
+              {{ todoList.total }}
+            }@else {
+              0
+            }
+            tarefas restantes
+          </span>
+        </div>
+      }
     </div>
   </section>
   @if(showModal && todo){

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
 import { Todo, TodoList } from '../../types/todo.types';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +6,7 @@ import { ModalDeleteComponent } from '../../components/modal-delete/modal-delete
 import { TodoFormComponent } from '../../components/todo-form/todo-form.component';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { FilterComponent } from '../../components/filter/filter.component';
+import { LoadingComponent } from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,8 @@ import { FilterComponent } from '../../components/filter/filter.component';
     TodoFormComponent,
     ModalDeleteComponent,
     NotificationComponent,
-    FilterComponent
+    FilterComponent,
+    LoadingComponent
   ],
   providers: [TodoService],
   templateUrl: './home.component.html',
