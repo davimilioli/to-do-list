@@ -22,8 +22,16 @@ import { LoadingComponent } from '../../components/loading/loading.component';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  todoList!: TodoList;
-  todoOriginal: Todo[] = []
+  todoList = signal<TodoList>(
+    {
+      page: 1,
+      pageSize: 12,
+      total: 0,
+      todos: []
+    }
+  );
+
+  todoOriginal = signal<Todo[]>([]);
   todo: Todo | null = null;
   editTodoId: number | null = null;
   showModal: boolean = false;
@@ -32,7 +40,8 @@ export class HomeComponent {
   messageNotify!: string;
   statusNotify!: 'success' | 'error';
 
-  currentFilter: string = 'all'
+  currentFilter: string = 'all';
+
 
   constructor(private service: TodoService){
     this.loadTodos();
@@ -41,8 +50,8 @@ export class HomeComponent {
   loadTodos(){
     this.service.getAllTodo().subscribe({
       next: (data) => {
-        this.todoList = data;
-        this.todoOriginal = [...data.todos];
+        this.todoList.set(data);
+        this.todoOriginal.set(data.todos);
       },
       error: (error) => {
         console.log(error)
@@ -101,8 +110,12 @@ export class HomeComponent {
   deleteTodo(todo: Todo) {
     this.service.deleteTodo(todo.id).subscribe({
       next: () => {
-        this.todoList.todos = this.todoList.todos.filter(t => t.id !== todo.id);
-        this.todoList.total--;
+        this.todoList.update(prev => {
+          const filtered = prev.todos.filter(t => t.id !== todo.id);
+          return { ...prev, todos: filtered, total: filtered.length}
+        });
+
+        this.todoOriginal.update(list => list.filter(t => t.id !== todo.id));
       },
       error: (error) => {
         this.notify('error', 'Erro ao excluir tarefa');
@@ -129,9 +142,15 @@ export class HomeComponent {
   insertTodo(title: string){
     this.service.addTodo(title).subscribe({
       next: (data) => {
-        this.todoList.todos.push(data);
-        this.todoOriginal.push(data);
-        this.todoList.total++;
+        this.todoList.update(prev => {
+          const updateTodos = [...prev.todos, data];
+          return {
+            ...prev,
+            todos: updateTodos,
+            total: updateTodos.length
+          }
+        });
+        this.todoOriginal.update(prev => [...prev, data]);
         this.filterList(this.currentFilter);
       },
       error: (error) => {
@@ -156,23 +175,34 @@ export class HomeComponent {
 
   filterList(filter: string) {
     this.currentFilter = filter;
-    if(filter == 'all') this.todoList.todos = [...this.todoOriginal];
-    if(filter == 'active') this.todoList.todos = this.todoOriginal.filter(t => !t.completed); 
-    if(filter == 'completed') this.todoList.todos = this.todoOriginal.filter(t => t.completed);
-    if(filter == 'clear') this.filterClear() ;
 
-    this.todoList.total = this.todoList.todos.length;
+    const original = this.todoOriginal();
+    let filtered = [...original];
+
+    if(filter === 'active') filtered = original.filter(t => !t.completed);
+    if(filter === 'completed') filtered = original.filter(t => t.completed);
+    if(filter === 'clear') this.filterClear();
+
+    this.todoList.update(prev => ({
+      ...prev,
+      todos: filtered,
+      total: filtered.length
+    }));
   }
 
   filterClear() {
-    const completedTodos = this.todoOriginal.filter(t => t.completed);
+    const original = this.todoOriginal();
+    const completedTodos = original.filter(t => t.completed);
 
     completedTodos.forEach(t => {
       this.service.deleteTodo(t.id).subscribe({
         next: () => {
-          this.todoOriginal = this.todoOriginal.filter(t => !t.completed);
-          this.todoList.todos = [...this.todoOriginal];
-          this.todoList.total = this.todoList.todos.length;
+          this.todoOriginal.update(prev => prev.filter(t => !t.completed));
+          this.todoList.update(prev => ({
+            ...prev,
+            todos: prev.todos,
+            total: prev.todos.length
+          }));;
           this.currentFilter = 'all';
         },
         error: (error) => {

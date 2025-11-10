@@ -7,7 +7,7 @@
       </div>
 
       <app-todo-form (newTodo)="insertTodo($event)"></app-todo-form>
-      @if(todoList){
+      @if(todoList()){
         <app-filter
         (filter)="filterList($event)"
         [currentFilter]="currentFilter"
@@ -15,8 +15,8 @@
       }
 
       <ul class="todo-list">
-        @if(todoList){
-          @for(todo of todoList.todos; track todo){
+        @if(todoList()){
+          @for(todo of todoList().todos; track todo){
             <li class="todo-item">
               <button class="checkbox" (click)="toggleCompleted(todo)">
                 <img src="icons/check.svg" [class.completed]="todo.completed">
@@ -56,11 +56,11 @@
           <app-loading></app-loading>
         }
       </ul>
-      @if(todoList){
+      @if(todoList()){
         <div class="todo-meta">
           <span>
-            @if(todoList) {
-              {{ todoList.total }}
+            @if(todoList()) {
+              {{ todoList().total }}
             }@else {
               0
             }
