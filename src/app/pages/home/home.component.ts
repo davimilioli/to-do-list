@@ -3,10 +3,11 @@ import { TodoService } from '../../services/todo.service';
 import { Todo, TodoList } from '../../types/todo.types';
 import { FormsModule } from '@angular/forms';
 import { ModalDeleteComponent } from '../../components/modal-delete/modal-delete.component';
+import { TodoFormComponent } from '../../components/todo-form/todo-form.component';
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule, ModalDeleteComponent],
+  imports: [FormsModule, TodoFormComponent, ModalDeleteComponent],
   providers: [TodoService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -100,6 +101,21 @@ export class HomeComponent {
     if (todo) this.deleteTodo(todo);
     this.showModal = false;
     this.todo = null;
+  }
+
+  insertTodo(title: string){
+    this.service.addTodo(title).subscribe({
+      next: (data) => {
+        this.todoList.todos.push(data);
+        this.todoList.total++;
+      },
+      error: (error) => {
+        console.log(error)
+      },
+      complete: () => {
+        console.log('completo')
+      }
+    })
   }
 
 }

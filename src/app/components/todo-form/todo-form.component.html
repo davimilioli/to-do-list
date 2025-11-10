@@ -1,0 +1,10 @@
+<form class="todo-new" (ngSubmit)="submit()">
+    <input
+    type="text"
+    placeholder="O que você precisa fazer?"
+    [(ngModel)]="newTodoTitle"
+    name="title"
+    required
+    />
+    <button type="submit" class="btn primary">Adicionar</button>
+</form>

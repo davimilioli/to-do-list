@@ -6,10 +6,7 @@
         <p class="todo-subtitle">Organize suas tarefas de forma simples</p>
       </div>
 
-      <form class="todo-new">
-        <input type="text" placeholder="O que você precisa fazer?" />
-        <button type="submit" class="btn primary">Adicionar</button>
-      </form>
+      <app-todo-form (newTodo)="insertTodo($event)"></app-todo-form>
 
       <div class="todo-filters">
         <button class="active">Todas</button>
