@@ -60,3 +60,9 @@ Link da API - https://github.com/davimilioli/to-do-list-api
 ```bash
     ng serve
 ```
+## Erros ou Dúvidas
+
+Se você encontrar algum erro, bug ou tiver dúvidas sobre o projeto, entre em contato:
+
+- Linkedin: https://www.linkedin.com/in/davimilioli/
+- Email: davimilioli2108@gmail.com
