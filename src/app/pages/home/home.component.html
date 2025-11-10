@@ -8,12 +8,10 @@
 
       <app-todo-form (newTodo)="insertTodo($event)"></app-todo-form>
 
-      <div class="todo-filters">
-        <button class="active">Todas</button>
-        <button>Ativas</button>
-        <button>Concluídas</button>
-        <button class="clear">Limpar concluídas</button>
-      </div>
+      <app-filter
+      (filter)="filterList($event)"
+      [currentFilter]="currentFilter"
+      ></app-filter>
 
       <ul class="todo-list">
         @if(todoList){

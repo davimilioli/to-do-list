@@ -1,0 +1,39 @@
+.todo-filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: .5rem;
+  background: var(--card-color);
+  padding: 1rem;
+  border-radius: 12px;
+
+  button {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary-color);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.active {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    &:hover {
+      border-color: var(--primary-color);
+      color: #f8fafc;
+    }
+
+    &.clear {
+      margin-left: auto;
+      color: #f87171;
+
+      &:hover {
+        border-color: #f87171;
+      }
+    }
+  }
+}

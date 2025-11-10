@@ -5,13 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { ModalDeleteComponent } from '../../components/modal-delete/modal-delete.component';
 import { TodoFormComponent } from '../../components/todo-form/todo-form.component';
 import { NotificationComponent } from '../../components/notification/notification.component';
+import { FilterComponent } from '../../components/filter/filter.component';
 
 @Component({
   selector: 'app-home',
   imports: [FormsModule,
     TodoFormComponent,
     ModalDeleteComponent,
-    NotificationComponent
+    NotificationComponent,
+    FilterComponent
   ],
   providers: [TodoService],
   templateUrl: './home.component.html',
@@ -19,6 +21,7 @@ import { NotificationComponent } from '../../components/notification/notificatio
 })
 export class HomeComponent {
   todoList!: TodoList;
+  todoOriginal: Todo[] = []
   todo: Todo | null = null;
   editTodoId: number | null = null;
   showModal: boolean = false;
@@ -26,6 +29,8 @@ export class HomeComponent {
   showNotify: boolean = false;
   messageNotify!: string;
   statusNotify!: 'success' | 'error';
+
+  currentFilter: string = 'all'
 
   constructor(private service: TodoService){
     this.loadTodos();
@@ -35,7 +40,7 @@ export class HomeComponent {
     this.service.getAllTodo().subscribe({
       next: (data) => {
         this.todoList = data;
-        console.log(data)
+        this.todoOriginal = [...data.todos];
       },
       error: (error) => {
         console.log(error)
@@ -123,7 +128,9 @@ export class HomeComponent {
     this.service.addTodo(title).subscribe({
       next: (data) => {
         this.todoList.todos.push(data);
+        this.todoOriginal.push(data);
         this.todoList.total++;
+        this.filterList(this.currentFilter);
       },
       error: (error) => {
         this.notify('error', 'Erro ao criar tarefa');
@@ -143,6 +150,38 @@ export class HomeComponent {
     setTimeout(() => {
       this.showNotify = false;
     }, 5000)
+  }
+
+  filterList(filter: string) {
+    this.currentFilter = filter;
+    if(filter == 'all') this.todoList.todos = [...this.todoOriginal];
+    if(filter == 'active') this.todoList.todos = this.todoOriginal.filter(t => !t.completed); 
+    if(filter == 'completed') this.todoList.todos = this.todoOriginal.filter(t => t.completed);
+    if(filter == 'clear') this.filterClear() ;
+
+    this.todoList.total = this.todoList.todos.length;
+  }
+
+  filterClear() {
+    const completedTodos = this.todoOriginal.filter(t => t.completed);
+
+    completedTodos.forEach(t => {
+      this.service.deleteTodo(t.id).subscribe({
+        next: () => {
+          this.todoOriginal = this.todoOriginal.filter(t => !t.completed);
+          this.todoList.todos = [...this.todoOriginal];
+          this.todoList.total = this.todoList.todos.length;
+          this.currentFilter = 'all';
+        },
+        error: (error) => {
+          this.notify('error', 'Erro ao excluir tarefas');
+          console.log(error);
+        },
+        complete: () => {
+          this.notify('success', `Tarefas excluídas com sucesso`);
+        }
+      })
+    })
   }
 
 }

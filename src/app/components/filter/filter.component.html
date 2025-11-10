@@ -1,0 +1,6 @@
+<div class="todo-filters">
+    <button (click)="filterList('all')" [class.active]="currentFilter == 'all'" >Todos</button>
+    <button (click)="filterList('active')" [class.active]="currentFilter == 'active'">Ativos</button>
+    <button (click)="filterList('completed')" [class.active]="currentFilter == 'completed'">Concluídos</button>
+    <button (click)="filterList('clear')" class="clear">Limpar concluídas</button>
+</div>
