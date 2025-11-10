@@ -1,4 +1,3 @@
-@if(showModal){
 <div class="modal-delete">
     <div class="modal-delete-content">
         <div class="modal-delete-header">
@@ -7,13 +6,13 @@
         </div>
         <div class="modal-delete-body">
             <h5>Tem certeza que deseja excluir esta tarefa?</h5>
-            <p class="modal-delete-todo">abacate</p>
+            <p class="modal-delete-todo">
+                {{ todo.title }}
+            </p>
         </div>
-
         <div class="modal-delete-footer">
             <button class="btn primary" (click)="closeModal()">Cancelar</button>
-            <button class="btn delete">Excluir</button>
+            <button class="btn delete" (click)="closeModal(todo)">Excluir</button>
         </div>
     </div>
 </div>
-}

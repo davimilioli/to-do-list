@@ -23,8 +23,8 @@ export class TodoService {
     return this.http.put<Todo>(`${this.apiUrl}/todo/${id}`, { title })
   }
 
-  deleteTodo(id: number) {
-    
+  deleteTodo(id: number): Observable<Todo> {
+    return this.http.delete<Todo>(`${this.apiUrl}/todo/${id}`);
   }
 
 

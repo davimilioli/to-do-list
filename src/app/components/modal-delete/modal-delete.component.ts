@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter  } from '@angular/core';
+import { Todo } from '../../types/todo.types';
 
 @Component({
   selector: 'app-modal-delete',
@@ -6,12 +7,12 @@ import { Component, Input, Output, EventEmitter  } from '@angular/core';
   templateUrl: './modal-delete.component.html',
   styleUrl: './modal-delete.component.scss'
 })
-export class ModalDeleteComponent {
+export class ModalDeleteComponent{
  @Input() showModal!: boolean
- @Output() close = new EventEmitter<void>();
+ @Input() todo!: Todo;
+ @Output() close = new EventEmitter<Todo | null>();
 
-  closeModal() {
-    this.close.emit();
+  closeModal(todo?: Todo | null) {
+    this.close.emit(todo ?? null);
   }
-
 }

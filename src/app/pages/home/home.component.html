@@ -50,7 +50,7 @@
                     <img src="icons/save.svg">
                 </button>
               }
-                <button class="btn delete" (click)="deleteTodo(todo)">
+                <button class="btn delete" (click)="onShowModal(todo)">
                     <img src="icons/delete.svg">
                 </button>
               </div>
@@ -73,5 +73,12 @@
       </div>
     </div>
   </section>
-  <app-modal-delete [showModal]="showModal" (close)="onCloseModal()"></app-modal-delete>
+  @if(showModal && todo){
+    <app-modal-delete 
+    [showModal]="showModal" 
+    [todo]="todo"
+    (close)="onCloseModal($event)"
+    >
+    </app-modal-delete>
+  }
 </main>

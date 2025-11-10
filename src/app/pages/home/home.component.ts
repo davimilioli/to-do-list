@@ -13,6 +13,7 @@ import { ModalDeleteComponent } from '../../components/modal-delete/modal-delete
 })
 export class HomeComponent {
   todoList!: TodoList;
+  todo: Todo | null = null;
   editTodoId: number | null = null;
   showModal: boolean = false;
 
@@ -60,9 +61,7 @@ export class HomeComponent {
   }
 
   editTitle(todo: Todo) {
-    if(!todo.title.trim()) {
-      return;
-    }
+    if(!todo.title.trim()) return;
 
     this.service.updateTodoTitle(todo.id, todo.title).subscribe({
       next: (data) => {
@@ -79,16 +78,28 @@ export class HomeComponent {
   }
 
   deleteTodo(todo: Todo) {
-    this.onShowModal();
-    console.log(todo)
+    this.service.deleteTodo(todo.id).subscribe({
+      next: (data) => {
+        this.loadTodos();
+      },
+      error: (error) => {
+        console.log(error)
+      },
+      complete: () => {
+        console.log('completo')
+      }
+    })
   }
 
-  onShowModal(){
+  onShowModal(todo: Todo | null){
+    if(todo) this.todo = todo;
     this.showModal = true;
   }
 
-  onCloseModal(){
+  onCloseModal(todo?: Todo | null) {
+    if (todo) this.deleteTodo(todo);
     this.showModal = false;
+    this.todo = null;
   }
 
 }
