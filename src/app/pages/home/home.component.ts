@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
-import { Todo, TodoList } from '../../types/Todo';
+import { Todo, TodoList } from '../../types/todo.types';
 import { FormsModule } from '@angular/forms';
 import { ModalDeleteComponent } from '../../components/modal-delete/modal-delete.component';
 
