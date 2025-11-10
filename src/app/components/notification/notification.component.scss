@@ -1,0 +1,18 @@
+.notification{
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    background: var(--card-color);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    border-top: 3px solid transparent;
+
+
+    &.success {
+        border-color: #06d463;
+    }
+
+    &.error {
+        border-color: #d4064b;
+    }
+}

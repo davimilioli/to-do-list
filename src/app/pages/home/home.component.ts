@@ -4,10 +4,15 @@ import { Todo, TodoList } from '../../types/todo.types';
 import { FormsModule } from '@angular/forms';
 import { ModalDeleteComponent } from '../../components/modal-delete/modal-delete.component';
 import { TodoFormComponent } from '../../components/todo-form/todo-form.component';
+import { NotificationComponent } from '../../components/notification/notification.component';
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule, TodoFormComponent, ModalDeleteComponent],
+  imports: [FormsModule,
+    TodoFormComponent,
+    ModalDeleteComponent,
+    NotificationComponent
+  ],
   providers: [TodoService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -17,6 +22,10 @@ export class HomeComponent {
   todo: Todo | null = null;
   editTodoId: number | null = null;
   showModal: boolean = false;
+
+  showNotify: boolean = false;
+  messageNotify!: string;
+  statusNotify!: 'success' | 'error';
 
   constructor(private service: TodoService){
     this.loadTodos();
@@ -44,9 +53,11 @@ export class HomeComponent {
         todo.completed = data.completed
       },
       error: (error) => {
-        console.log(error)
+        this.notify('error', 'Erro ao alterar status de tarefa');
+        console.log(error);
       },
       complete: () => {
+        this.notify('success', `Tarefa ${todo.completed == true ? 'concluída' : 'em andamento'}`);
         console.log('completo')
       }
     })
@@ -70,9 +81,11 @@ export class HomeComponent {
         this.cancelEdit();
       },
       error: (error) => {
-        console.log(error)
+        this.notify('error', 'Erro ao alterar titulo da tarefa');
+        console.log(error);
       },
       complete: () => {
+        this.notify('success', `Titulo da tarefa alterado com sucesso`);
         console.log('completo')
       }
     })
@@ -84,9 +97,11 @@ export class HomeComponent {
         this.loadTodos();
       },
       error: (error) => {
-        console.log(error)
+        this.notify('error', 'Erro ao excluir tarefa');
+        console.log(error);
       },
       complete: () => {
+        this.notify('success', `Tarefa excluída com sucesso`);
         console.log('completo')
       }
     })
@@ -110,12 +125,23 @@ export class HomeComponent {
         this.todoList.total++;
       },
       error: (error) => {
-        console.log(error)
+        this.notify('error', 'Erro ao criar tarefa');
+        console.log(error);
       },
       complete: () => {
+        this.notify('success', `Tarefa criada com sucesso`);
         console.log('completo')
       }
     })
+  }
+
+  private notify(status: 'success' | 'error', message: string){
+    this.showNotify = true;
+    this.statusNotify = status
+    this.messageNotify = message;
+    setTimeout(() => {
+      this.showNotify = false;
+    }, 5000)
   }
 
 }

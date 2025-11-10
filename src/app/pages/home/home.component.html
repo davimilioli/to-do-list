@@ -78,4 +78,13 @@
     >
     </app-modal-delete>
   }
+
+  @if(showNotify){
+    <app-notification
+    [status]="statusNotify"
+    [message]="messageNotify"
+    >
+  </app-notification>
+
+  }
 </main>
