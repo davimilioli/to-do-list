@@ -93,8 +93,9 @@ export class HomeComponent {
 
   deleteTodo(todo: Todo) {
     this.service.deleteTodo(todo.id).subscribe({
-      next: (data) => {
-        this.loadTodos();
+      next: () => {
+        this.todoList.todos = this.todoList.todos.filter(t => t.id !== todo.id);
+        this.todoList.total--;
       },
       error: (error) => {
         this.notify('error', 'Erro ao excluir tarefa');
