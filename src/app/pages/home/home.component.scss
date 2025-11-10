@@ -3,22 +3,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
 
   .container {
     max-width: 750px;
     width: 750px;
     width: 100%;
     margin: auto;
-    background: var(--card-color);
-    border-radius: 12px;
     padding: 1.5rem;
   }
 }
 
 .todo-header {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: .5rem;
+  background: var(--card-color);
+  padding: 1rem;
+  border-radius: 12px;
 
   .todo-title {
     margin: 0;
@@ -39,7 +39,10 @@
   gap: 8px;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
+  background: var(--card-color);
+  padding: 1rem;
+  border-radius: 12px;
 
   button {
     background: transparent;
@@ -77,6 +80,10 @@
   padding: 0;
   max-height: 50vh;
   overflow-y: auto;
+  background: var(--card-color);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: .5rem;
 
   .todo-item {
     display: flex;
@@ -84,7 +91,7 @@
     gap: 12px;
     padding: 10px;
     margin-bottom: 8px;
-    border-radius: 8px;
+    border-radius: 12px;
     background: #ffffff05;
     transition: background 0.2s;
 
@@ -150,7 +157,9 @@
 }
 
 .todo-meta {
-  margin-top: 1rem;
+  background: var(--card-color);
+  padding: 1rem;
+  border-radius: 12px;
   color: var(--text-secondary-color);
   font-size: 0.9rem;
   text-align: right;

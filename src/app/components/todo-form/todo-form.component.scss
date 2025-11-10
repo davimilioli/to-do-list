@@ -1,7 +1,10 @@
 .todo-new {
   display: flex;
   gap: 8px;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
+  background: var(--card-color);
+  padding: 1rem;
+  border-radius: 12px;
 
   input {
     flex: 1;
