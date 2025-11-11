@@ -1,63 +1,39 @@
-<!-- <button (click)="show()">Show</button>
-<div>
+<ul class="todo-list">
     @if(todos && todos.length > 0){
-
         @for(todo of todos; track todo){
-        <ul>
+            <li class="todo-item">
+                <button class="checkbox" (click)="toggleCompleted(todo)">
+                    <img src="icons/check.svg" [class.completed]="todo.completed">
+                </button>
+                @if(editTodoId !== todo.id){
+                <span class="text" [class.completed]="todo.completed">
+                    {{ todo.title }}
+                </span>
+                } @else {
+                <input type="text" class="input-edit" [value]="todo.title" [(ngModel)]="todo.title"
+                    (keyup.enter)="editTitle(todo)" (blur)="editTitle(todo)" autofocus>
+                }
 
-            <li>
-                {{ todo.title }}
+                <div class="actions">
+                    @if(editTodoId !== todo.id){
+                    <button (click)="enableEdit(todo.id)" class="btn edit">
+                        <img src="icons/edit.svg">
+                    </button>
+                    }@else {
+                    <button (click)="cancelEdit()" class="btn save">
+                        <img src="icons/save.svg">
+                    </button>
+                    }
 
+                    <button class="btn delete" (click)="delTodo(todo)">
+                        <img src="icons/delete.svg">
+                    </button>
+                </div>
             </li>
-        </ul>
         }
     } @else {
-    <p>tem não</p>
-    }
-</div> -->
-
-@if(todos && todos.length > 0){
-<ul class="todo-list">
-    @for(todo of todos; track todo){
-    <li class="todo-item">
-        <button class="checkbox" (click)="toggleCompleted(todo)">
-            <img src="icons/check.svg" [class.completed]="todo.completed">
-        </button>
-        @if(editTodoId !== todo.id){
-            <span class="text" [class.completed]="todo.completed">
-            {{ todo.title }}
-            </span>
-        } @else {
-            <input
-            type="text"
-            class="input-edit"
-            [value]="todo.title"
-            [(ngModel)]="todo.title"
-            (keyup.enter)="editTitle(todo)"
-            (blur)="editTitle(todo)"
-            autofocus
-            >
-        }
-
-        <div class="actions">
-              @if(editTodoId !== todo.id){
-                <button (click)="enableEdit(todo.id)" class="btn edit">
-                    <img src="icons/edit.svg">
-                </button>
-              }@else {
-                <button (click)="cancelEdit()" class="btn save">
-                    <img src="icons/save.svg">
-                </button>
-              }
-
-            <button class="btn delete" (click)="delTodo(todo)">
-                <img src="icons/delete.svg">
-            </button>
-        </div>
-    </li>
+        <li class="todo-item not-item">
+            <p>Não possui nenhuma tarefa.</p>
+        </li>
     }
 </ul>
-} @else {
-    <p>Tem não</p>
-}
-

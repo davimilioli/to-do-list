@@ -23,6 +23,10 @@
       background: var(--border-color);
     }
 
+    &.not-item {
+      justify-content: center;
+    }
+
     .checkbox {
       width: 24px;
       height: 24px;
