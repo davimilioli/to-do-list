@@ -14,48 +14,16 @@
         ></app-filter>
       }
 
-      <ul class="todo-list">
-        @if(todoList()){
-          @for(todo of todoList().todos; track todo){
-            <li class="todo-item">
-              <button class="checkbox" (click)="toggleCompleted(todo)">
-                <img src="icons/check.svg" [class.completed]="todo.completed">
-              </button>
-              @if(editTodoId !== todo.id){
-              <span class="text" [class.completed]="todo.completed">
-                {{ todo.title }}
-              </span>
-            } @else {
-                <input
-                type="text"
-                class="input-edit"
-                [value]="todo.title"
-                [(ngModel)]="todo.title"
-                (keyup.enter)="editTitle(todo)"
-                (blur)="editTitle(todo)"
-                autofocus
-                >
-              }
-              <div class="actions">
-              @if(editTodoId !== todo.id){
-                <button (click)="enableEdit(todo.id)" class="btn edit">
-                    <img src="icons/edit.svg">
-                </button>
-              }@else {
-                <button (click)="cancelEdit()" class="btn save">
-                    <img src="icons/save.svg">
-                </button>
-              }
-                <button class="btn delete" (click)="onShowModal(todo)">
-                    <img src="icons/delete.svg">
-                </button>
-              </div>
-            </li>
-          }
-        } @else {
-          <app-loading></app-loading>
-        }
-      </ul>
+      @if(todoList()){
+        
+        <app-todo-list
+        [todos]="todoList().todos"
+        (updateCompleted)="onUpdateCompleted($event)"
+        (updateTitle)="onUpdateTitle($event)"
+        (showModalDelete)="onShowModalDelete($event)"
+        ></app-todo-list>
+
+      }
       @if(todoList()){
         <div class="todo-meta">
           <span>
@@ -70,10 +38,10 @@
       }
     </div>
   </section>
-  @if(showModal && todo){
+  @if(showModal && modalInfo){
     <app-modal-delete 
     [showModal]="showModal" 
-    [todo]="todo"
+    [todo]="modalInfo"
     (close)="onCloseModal($event)"
     >
     </app-modal-delete>

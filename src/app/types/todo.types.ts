@@ -10,3 +10,18 @@ export interface TodoList  {
     total: number;
     todos: Todo[];
 }
+
+export interface UpdateCompleted {
+    id: number;
+    completed: boolean;
+}
+
+export interface UpdateTitle {
+    id: number;
+    title: string;
+}
+
+export interface DeleteTodo {
+    id: number;
+    title: string;
+}

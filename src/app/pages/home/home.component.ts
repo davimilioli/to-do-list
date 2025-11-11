@@ -1,17 +1,19 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
-import { Todo, TodoList } from '../../types/todo.types';
+import { Todo, TodoList, UpdateCompleted, UpdateTitle, DeleteTodo } from '../../types/todo.types';
 import { FormsModule } from '@angular/forms';
 import { ModalDeleteComponent } from '../../components/modal-delete/modal-delete.component';
 import { TodoFormComponent } from '../../components/todo-form/todo-form.component';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { FilterComponent } from '../../components/filter/filter.component';
 import { LoadingComponent } from '../../components/loading/loading.component';
+import { TodoListComponent } from '../../components/todo-list/todo-list.component';
 
 @Component({
   selector: 'app-home',
   imports: [FormsModule,
     TodoFormComponent,
+    TodoListComponent,
     ModalDeleteComponent,
     NotificationComponent,
     FilterComponent,
@@ -21,7 +23,7 @@ import { LoadingComponent } from '../../components/loading/loading.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
   todoList = signal<TodoList>(
     {
       page: 1,
@@ -34,7 +36,9 @@ export class HomeComponent {
   todoOriginal = signal<Todo[]>([]);
   todo: Todo | null = null;
   editTodoId: number | null = null;
+
   showModal: boolean = false;
+  modalInfo: { id: number, title: string } | null = null
 
   showNotify: boolean = false;
   messageNotify!: string;
@@ -42,8 +46,9 @@ export class HomeComponent {
 
   currentFilter: string = 'all';
 
+  constructor(private service: TodoService){}
 
-  constructor(private service: TodoService){
+  ngOnInit(): void {
     this.loadTodos();
   }
 
@@ -62,8 +67,7 @@ export class HomeComponent {
     })
   }
 
-  toggleCompleted(todo: Todo) {
-    todo.completed = !todo.completed;
+  onUpdateCompleted(todo: any){
     this.service.updateTodoCompleted(todo.id, todo.completed).subscribe({
       next: (data) => {
         todo.completed = data.completed
@@ -79,22 +83,12 @@ export class HomeComponent {
     })
   }
 
-  enableEdit(id: number) {
-    console.log(id)
-    this.editTodoId = id;
-  }
-
-  cancelEdit(){
-    this.editTodoId = null;
-  }
-
-  editTitle(todo: Todo) {
+  onUpdateTitle(todo: any) {
     if(!todo.title.trim()) return;
 
     this.service.updateTodoTitle(todo.id, todo.title).subscribe({
       next: (data) => {
         todo.title = data.title;
-        this.cancelEdit();
       },
       error: (error) => {
         this.notify('error', 'Erro ao alterar titulo da tarefa');
@@ -107,15 +101,15 @@ export class HomeComponent {
     })
   }
 
-  deleteTodo(todo: Todo) {
-    this.service.deleteTodo(todo.id).subscribe({
+  onDeleteTodo(id: number) {
+    this.service.deleteTodo(id).subscribe({
       next: () => {
         this.todoList.update(prev => {
-          const filtered = prev.todos.filter(t => t.id !== todo.id);
+          const filtered = prev.todos.filter(t => t.id !== id);
           return { ...prev, todos: filtered, total: filtered.length}
         });
 
-        this.todoOriginal.update(list => list.filter(t => t.id !== todo.id));
+        this.todoOriginal.update(list => list.filter(t => t.id !== id));
       },
       error: (error) => {
         this.notify('error', 'Erro ao excluir tarefa');
@@ -128,13 +122,13 @@ export class HomeComponent {
     })
   }
 
-  onShowModal(todo: Todo | null){
-    if(todo) this.todo = todo;
+  onShowModalDelete(todo: DeleteTodo){
+    if(todo) this.modalInfo = todo;
     this.showModal = true;
   }
 
-  onCloseModal(todo?: Todo | null) {
-    if (todo) this.deleteTodo(todo);
+  onCloseModal(id: number | null) {
+    if (id) this.onDeleteTodo(id);
     this.showModal = false;
     this.todo = null;
   }
