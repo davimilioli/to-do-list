@@ -6,7 +6,6 @@ import { ModalDeleteComponent } from '../../components/modal-delete/modal-delete
 import { TodoFormComponent } from '../../components/todo-form/todo-form.component';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { FilterComponent } from '../../components/filter/filter.component';
-import { LoadingComponent } from '../../components/loading/loading.component';
 import { TodoListComponent } from '../../components/todo-list/todo-list.component';
 
 @Component({
@@ -16,8 +15,7 @@ import { TodoListComponent } from '../../components/todo-list/todo-list.componen
     TodoListComponent,
     ModalDeleteComponent,
     NotificationComponent,
-    FilterComponent,
-    LoadingComponent
+    FilterComponent
   ],
   providers: [TodoService],
   templateUrl: './home.component.html',
