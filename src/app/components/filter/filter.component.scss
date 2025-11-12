@@ -11,11 +11,38 @@
   button {
     background: transparent;
     border: 1px solid var(--border-color);
-    color: var(--text-secondary-color);
+    color: var(--text-color);
     border-radius: 8px;
     padding: 6px 10px;
     cursor: pointer;
     transition: all 0.2s;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    .badge {
+      padding: .1rem .4rem;
+      background: var(--primary-color);
+      color: #FFF;
+      border-radius: 50%;
+      font-size: 11px;
+    }
+
+    &:disabled {
+      border-color: #262626;
+      color: var(--text-secondary-color);
+      opacity: 0.7;
+      cursor: not-allowed;
+
+      .badge {
+        background-color: #262626;
+      }
+      
+      &:hover {
+        border-color: var(--border-color);
+        color: var(--text-secondary-color);
+      }
+    }
 
     &.active {
       border-color: var(--primary-color);

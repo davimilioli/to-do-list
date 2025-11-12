@@ -7,15 +7,13 @@
       </div>
 
       <app-todo-form (newTodo)="insertTodo($event)"></app-todo-form>
-      @if(todoList()){
+
+      @if(todoList().todos && todoList().todos.length > 0){
         <app-filter
         (filter)="filterList($event)"
         [currentFilter]="currentFilter"
         ></app-filter>
-      }
 
-      @if(todoList()){
-        
         <app-todo-list
         [todos]="todoList().todos"
         (updateCompleted)="onUpdateCompleted($event)"
@@ -23,36 +21,27 @@
         (showModalDelete)="onShowModalDelete($event)"
         ></app-todo-list>
 
-      }
-      @if(todoList()){
         <div class="todo-meta">
           <span>
-            @if(todoList()) {
-              {{ todoList().total }}
-            }@else {
-              0
-            }
-            tarefas restantes
+           ...
           </span>
         </div>
       }
     </div>
   </section>
+
   @if(showModal && modalInfo){
     <app-modal-delete 
     [showModal]="showModal" 
     [todo]="modalInfo"
     (close)="onCloseModal($event)"
-    >
-    </app-modal-delete>
+    ></app-modal-delete>
   }
 
   @if(showNotify){
     <app-notification
     [status]="statusNotify"
     [message]="messageNotify"
-    >
-  </app-notification>
-
+    ></app-notification>
   }
 </main>
