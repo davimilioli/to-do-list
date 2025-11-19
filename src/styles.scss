@@ -37,8 +37,8 @@ body {
 }
 
 .btn {
-  background: var(--primary-color);
-  border: none;
+  background: none;
+  border: 1px solid transparent;
   color: #FFF;
   padding: 10px 14px;
   border-radius: 8px;
@@ -60,6 +60,10 @@ body {
     &:hover {
       background: var(--secondary-color);
     }
+  }
+
+  &.outline {
+    border-color: var(--border-color);
   }
 
   &.edit {
