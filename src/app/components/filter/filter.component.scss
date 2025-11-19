@@ -21,11 +21,17 @@
     align-items: center;
 
     .badge {
-      padding: .1rem .4rem;
+      padding: .1rem .5rem;
       background: var(--primary-color);
       color: #FFF;
       border-radius: 50%;
       font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 18px;
+      height: 18px;
     }
 
     &:disabled {

@@ -8,11 +8,10 @@ import { Component, EventEmitter, Output, Input} from '@angular/core';
 })
 export class FilterComponent{
   @Input() currentFilter: string = 'all';
+  @Input() countAll: number = 0;
+  @Input() countActive: number = 0;
+  @Input() countCompleted: number = 0;
   @Output() filter = new EventEmitter<string>();
-
-  countAll = 0
-  countActive = 0
-  countCompleted = 0
 
   filterList(value: string) {
     this.currentFilter = value;

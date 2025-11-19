@@ -10,6 +10,9 @@
 
       @if(todoList().todos && todoList().todos.length > 0){
         <app-filter
+        [countAll]="countFilterAll"
+        [countActive]="countFilterActive"
+        [countCompleted]="countFilterCompleted"
         (filter)="filterList($event)"
         [currentFilter]="currentFilter"
         ></app-filter>

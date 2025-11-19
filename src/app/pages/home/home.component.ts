@@ -43,6 +43,9 @@ export class HomeComponent implements OnInit{
   statusNotify!: 'success' | 'error';
 
   currentFilter: string = 'all';
+  countFilterAll: number = 0;
+  countFilterActive: number = 0;
+  countFilterCompleted: number = 0;
 
   constructor(private service: TodoService){}
 
@@ -55,6 +58,7 @@ export class HomeComponent implements OnInit{
       next: (data) => {
         this.todoList.set(data);
         this.todoOriginal.set(data.todos);
+        this.filterUpdateCounts();
       },
       error: (error) => {
         console.log(error)
@@ -69,6 +73,7 @@ export class HomeComponent implements OnInit{
     this.service.updateTodoCompleted(todo.id, todo.completed).subscribe({
       next: (data) => {
         todo.completed = data.completed
+        this.filterUpdateCounts();
       },
       error: (error) => {
         this.notify('error', 'Erro ao alterar status de tarefa');
@@ -108,6 +113,7 @@ export class HomeComponent implements OnInit{
         });
 
         this.todoOriginal.update(list => list.filter(t => t.id !== id));
+        this.filterUpdateCounts();
       },
       error: (error) => {
         this.notify('error', 'Erro ao excluir tarefa');
@@ -136,6 +142,7 @@ export class HomeComponent implements OnInit{
       next: (data) => {
         this.todoList.update(prev => {
           const updateTodos = [...prev.todos, data];
+          this.filterUpdateCounts();
           return {
             ...prev,
             todos: updateTodos,
@@ -180,6 +187,12 @@ export class HomeComponent implements OnInit{
       todos: filtered,
       total: filtered.length
     }));
+  }
+
+  filterUpdateCounts(){
+    this.countFilterAll = this.todoOriginal().length;
+    this.countFilterActive = this.todoOriginal().filter(t => !t.completed).length;
+    this.countFilterCompleted= this.todoOriginal().filter(t => t.completed).length;
   }
 
   filterClear() {
