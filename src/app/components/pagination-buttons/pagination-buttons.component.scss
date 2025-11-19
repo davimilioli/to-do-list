@@ -1,0 +1,11 @@
+.todo-pagination-buttons {
+  background: var(--card-color);
+  padding: 1rem;
+  border-radius: 12px;
+  color: var(--text-secondary-color);
+  font-size: 0.9rem;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}

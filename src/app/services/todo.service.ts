@@ -11,10 +11,10 @@ export class TodoService {
 
   constructor(private http: HttpClient) { }
 
-  getAllTodo(): Observable<TodoList> {
-    return this.http.get<TodoList>(`${this.apiUrl}/todo`);
+  getAllTodo(page: number, pageSize: number): Observable<TodoList> {
+    return this.http.get<TodoList>(`${this.apiUrl}/todo?page=${page}&pageSize=${pageSize}`);
   }
-  
+
   updateTodoCompleted(id: number, completed: boolean): Observable<Todo> {
     return this.http.put<Todo>(`${this.apiUrl}/todo/${id}`, { completed });
   }

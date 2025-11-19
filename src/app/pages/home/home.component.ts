@@ -7,6 +7,7 @@ import { TodoFormComponent } from '../../components/todo-form/todo-form.componen
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { FilterComponent } from '../../components/filter/filter.component';
 import { TodoListComponent } from '../../components/todo-list/todo-list.component';
+import { PaginationButtonsComponent } from '../../components/pagination-buttons/pagination-buttons.component';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,8 @@ import { TodoListComponent } from '../../components/todo-list/todo-list.componen
     TodoListComponent,
     ModalDeleteComponent,
     NotificationComponent,
-    FilterComponent
+    FilterComponent,
+    PaginationButtonsComponent
   ],
   providers: [TodoService],
   templateUrl: './home.component.html',
@@ -54,7 +56,7 @@ export class HomeComponent implements OnInit{
   }
 
   loadTodos(){
-    this.service.getAllTodo().subscribe({
+    this.service.getAllTodo(1,12).subscribe({
       next: (data) => {
         this.todoList.set(data);
         this.todoOriginal.set(data.todos);
@@ -190,9 +192,9 @@ export class HomeComponent implements OnInit{
   }
 
   filterUpdateCounts(){
-    this.countFilterAll = this.todoOriginal().length;
-    this.countFilterActive = this.todoOriginal().filter(t => !t.completed).length;
-    this.countFilterCompleted= this.todoOriginal().filter(t => t.completed).length;
+    this.countFilterAll = this.todoList().total;
+    this.countFilterActive = this.todoList().todos.filter(t => !t.completed).length;
+    this.countFilterCompleted= this.todoList().todos.filter(t => t.completed).length;
   }
 
   filterClear() {

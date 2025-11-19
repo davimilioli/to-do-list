@@ -24,11 +24,9 @@
         (showModalDelete)="onShowModalDelete($event)"
         ></app-todo-list>
 
-        <div class="todo-meta">
-          <span>
-           ...
-          </span>
-        </div>
+        @if(todoList().total > 12){
+          <app-pagination-buttons></app-pagination-buttons>
+        }
       }
     </div>
   </section>
