@@ -64,9 +64,6 @@ export class HomeComponent implements OnInit{
       },
       error: (error) => {
         console.log(error)
-      },
-      complete: () => {
-        console.log('completo')
       }
     })
   }
@@ -74,16 +71,26 @@ export class HomeComponent implements OnInit{
   onUpdateCompleted(todo: any){
     this.service.updateTodoCompleted(todo.id, todo.completed).subscribe({
       next: (data) => {
-        todo.completed = data.completed
+        this.todoOriginal.update(prev =>
+          prev.map(t => t.id === todo.id ? { ...t, completed: data.completed }: t)
+        );
+
+        if (this.currentFilter === 'completed' && !data.completed) {
+          this.currentFilter = 'active';
+        }
+
+        if (this.currentFilter === 'active' && data.completed) {
+          this.currentFilter = 'completed';
+        }
+
+        this.filterList(this.currentFilter);
         this.filterUpdateCounts();
+
+        this.notify('success', `Tarefa ${data.completed ? 'concluída' : 'em andamento'}`);
       },
       error: (error) => {
         this.notify('error', 'Erro ao alterar status de tarefa');
         console.log(error);
-      },
-      complete: () => {
-        this.notify('success', `Tarefa ${todo.completed == true ? 'concluída' : 'em andamento'}`);
-        console.log('completo')
       }
     })
   }
@@ -94,14 +101,11 @@ export class HomeComponent implements OnInit{
     this.service.updateTodoTitle(todo.id, todo.title).subscribe({
       next: (data) => {
         todo.title = data.title;
+        this.notify('success', `Titulo da tarefa alterado com sucesso`);
       },
       error: (error) => {
         this.notify('error', 'Erro ao alterar titulo da tarefa');
         console.log(error);
-      },
-      complete: () => {
-        this.notify('success', `Titulo da tarefa alterado com sucesso`);
-        console.log('completo')
       }
     })
   }
@@ -109,23 +113,18 @@ export class HomeComponent implements OnInit{
   onDeleteTodo(id: number) {
     this.service.deleteTodo(id).subscribe({
       next: () => {
-        this.todoList.update(prev => {
-          const filtered = prev.todos.filter(t => t.id !== id);
-          return { ...prev, todos: filtered, total: filtered.length}
-        });
-
         this.todoOriginal.update(list => list.filter(t => t.id !== id));
+
+        this.filterList(this.currentFilter);
         this.filterUpdateCounts();
+
+        this.notify('success', `Tarefa excluída com sucesso`);
       },
       error: (error) => {
         this.notify('error', 'Erro ao excluir tarefa');
         console.log(error);
-      },
-      complete: () => {
-        this.notify('success', `Tarefa excluída com sucesso`);
-        console.log('completo')
       }
-    })
+    });
   }
 
   onShowModalDelete(todo: DeleteTodo){
@@ -142,39 +141,27 @@ export class HomeComponent implements OnInit{
   insertTodo(title: string){
     this.service.addTodo(title).subscribe({
       next: (data) => {
-        this.todoList.update(prev => {
-          const updateTodos = [...prev.todos, data];
-          this.filterUpdateCounts();
-          return {
-            ...prev,
-            todos: updateTodos,
-            total: updateTodos.length
-          }
-        });
         this.todoOriginal.update(prev => [...prev, data]);
         this.filterList(this.currentFilter);
+        this.filterUpdateCounts();
+
+        this.notify('success', `Tarefa criada com sucesso`);
       },
       error: (error) => {
         this.notify('error', 'Erro ao criar tarefa');
         console.log(error);
       },
-      complete: () => {
-        this.notify('success', `Tarefa criada com sucesso`);
-        console.log('completo')
-      }
-    })
-  }
 
-  private notify(status: 'success' | 'error', message: string){
-    this.showNotify = true;
-    this.statusNotify = status
-    this.messageNotify = message;
-    setTimeout(() => {
-      this.showNotify = false;
-    }, 5000)
+    });
   }
 
   filterList(filter: string) {
+
+    if (filter === 'clear') {
+      this.filterClear();
+      return;
+    }
+
     this.currentFilter = filter;
 
     const original = this.todoOriginal();
@@ -191,36 +178,46 @@ export class HomeComponent implements OnInit{
     }));
   }
 
-  filterUpdateCounts(){
-    this.countFilterAll = this.todoList().total;
-    this.countFilterActive = this.todoList().todos.filter(t => !t.completed).length;
-    this.countFilterCompleted= this.todoList().todos.filter(t => t.completed).length;
+  filterUpdateCounts() {
+    const original = this.todoOriginal();
+
+    this.countFilterAll = original.length;
+    this.countFilterActive = original.filter(t => !t.completed).length;
+    this.countFilterCompleted = original.filter(t => t.completed).length;
   }
 
   filterClear() {
-    const original = this.todoOriginal();
-    const completedTodos = original.filter(t => t.completed);
+    const completedTodos = this.todoOriginal().filter(t => t.completed);
+
+    if (completedTodos.length === 0) return;
+
+    this.todoOriginal.update(prev => prev.filter(t => !t.completed));
+
+    this.currentFilter = 'all';
+
+    this.filterList('all');
+
+    this.filterUpdateCounts();
 
     completedTodos.forEach(t => {
       this.service.deleteTodo(t.id).subscribe({
-        next: () => {
-          this.todoOriginal.update(prev => prev.filter(t => !t.completed));
-          this.todoList.update(prev => ({
-            ...prev,
-            todos: prev.todos,
-            total: prev.todos.length
-          }));;
-          this.currentFilter = 'all';
-        },
         error: (error) => {
           this.notify('error', 'Erro ao excluir tarefas');
           console.log(error);
-        },
-        complete: () => {
-          this.notify('success', `Tarefas excluídas com sucesso`);
         }
-      })
-    })
+      });
+    });
+
+    this.notify('success', 'Tarefas concluídas removidas');
+  }
+
+  private notify(status: 'success' | 'error', message: string){
+    this.showNotify = true;
+    this.statusNotify = status
+    this.messageNotify = message;
+    setTimeout(() => {
+      this.showNotify = false;
+    }, 5000)
   }
 
 }
