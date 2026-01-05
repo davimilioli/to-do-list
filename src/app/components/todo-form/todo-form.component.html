@@ -6,5 +6,5 @@
     name="title"
     required
     />
-    <button type="submit" class="btn primary">Adicionar</button>
+    <button type="submit" class="btn primary" [disabled]="!newTodoTitle.trim()">Adicionar</button>
 </form>
