@@ -3,7 +3,7 @@
         Todos
         <span class="badge">{{ countAll }}</span>
     </button>
-    <button (click)="filterList('active')" [class.active]="currentFilter == 'active'">
+    <button (click)="filterList('active')" [class.active]="currentFilter == 'active'" [disabled]="countActive === 0">
         Ativos
         <span class="badge">{{ countActive }}</span>
     </button>
@@ -11,5 +11,5 @@
         Concluídos
         <span class="badge">{{ countCompleted }}</span>
     </button>
-    <button (click)="filterList('clear')" class="clear">Limpar concluídas</button>
+    <button (click)="filterList('clear')" class="clear" [disabled]="countCompleted === 0">Limpar concluídas</button>
 </div>
