@@ -115,6 +115,10 @@ export class HomeComponent implements OnInit{
       next: () => {
         this.todoOriginal.update(list => list.filter(t => t.id !== id));
 
+        if (this.currentFilter === 'completed' && this.todoOriginal().filter(t => t.completed).length === 0) {
+          this.currentFilter = 'all';
+        }
+
         this.filterList(this.currentFilter);
         this.filterUpdateCounts();
 
